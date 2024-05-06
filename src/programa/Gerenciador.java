@@ -1,6 +1,8 @@
 package programa;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 
@@ -23,9 +25,10 @@ public class Gerenciador {
 		System.out.println("1. Adicionar Livro");
 		System.out.println("2. Listar Livros");
 		System.out.println("3. Buscar Livro por Título");
-		System.out.println("4. Atualizar Livro");
-		System.out.println("5. Remover Livro");
-		System.out.println("6. Sair");
+		System.out.println("4. Buscar Livro por Categoria");
+		System.out.println("5. Atualizar Livro");
+		System.out.println("6. Remover Livro");
+		System.out.println("7. Sair");
 		x = sc.nextInt();
 		sc.nextLine();
 		
@@ -35,16 +38,29 @@ public class Gerenciador {
 				String titulo = sc.nextLine();
 				System.out.print("Autor: ");
 				String autor = sc.nextLine();
+				System.out.print("Categoria: ");
+				String categoria = sc.nextLine();
 				System.out.print("Ano de publicação: ");
 				int ano = sc.nextInt();
 				System.out.print("Preço do livro: ");
 				double preco = sc.nextDouble();
 				sc.nextLine();
-				livro = new Book(titulo, autor, ano, preco);
+				livro = new Book(titulo, autor, categoria, ano, preco);
 				System.out.println("Livro adicionado com sucesso!");
 				livros.add(livro);
 				break;
 			case 2:	
+				System.out.print("Número total de livros: " + livros.size());
+				System.out.println("\n --------------------------------------------------");
+				 Collections.sort(livros, new Comparator<Book>() {
+			            @Override
+			            public int compare(Book livros1, Book livros2) {
+			            	return livros1.titulo.compareTo(livros2.titulo);
+			            }
+			        });
+				 
+				 Book livroMaisCaro = Collections.max(livros, Comparator.comparing(l -> l.preco));
+			        System.out.println("Livro mais caro: " + livroMaisCaro.titulo + " - Preço: " + livroMaisCaro.preco);
 				System.out.println(livros);
 				break;
 			case 3:
@@ -54,12 +70,19 @@ public class Gerenciador {
 					if(nomeLivro.titulo.equals(busca)) {
 						System.out.println("Livro encontrado: \n" + nomeLivro);
 						break;
-					}else {
-						System.out.println("Livro não encontrado!");
 					}
 				}
 				break;
 			case 4:
+				System.out.print("Digite a categoria que deseja pesquisar: ");
+				String pesquisa = sc.nextLine();
+				for(Book categoriaLivro : livros) {
+					if(categoriaLivro.categoria.equals(pesquisa)) {
+						System.out.println(categoriaLivro);
+					}
+				}
+				break;
+			case 5:
 				System.out.println("Livros registrados: \n" + livros);
 				System.out.print("Digite o nome do livro que deseja atualizar:");
 				String atualizar = sc.nextLine();
@@ -86,7 +109,7 @@ public class Gerenciador {
 					}
 				}
 				break;
-			case 5:
+			case 6:
 				System.out.print("Digite o nome do livro que vai ser removido: ");
 				String remover = sc.nextLine();
 				for(Book removerLivro : livros) {
@@ -100,7 +123,7 @@ public class Gerenciador {
 				}
 				
 		}
-		}while(x != 6);
+		}while(x != 7);
 		
 		
 				
